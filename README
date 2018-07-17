@@ -1,29 +1,27 @@
 Writing a C++ class
 Header (.h) and implementation (.cpp) files
-C++ classes are made up of a header file and an implementation file. Both files should have the same name except that the header file has a .h extension while the implementation has a .cpp extension. The header file contains the class interface, and the .cpp file contains the implementation. The header file consists of the class name, and the name (and type) of the member variables and the header for each of the methods. The .cpp file consists of the definition for each of the class methods.
+C++ classes are made up of a header file and an implementation file. Both files should have the same name except that the header file has a .h extension while the implementation has a .cpp extension. The header file contains the class interface, and the .cpp file contains the implementation. The header file consists of the class name, the name (and type) of the member variables, and the header for each of the methods. The .cpp file consists of the definition for each of the class methods.
 
-Note that these file names are not required by the C++ language; they are simply conventions. Nearly everyone gives header files a .h extension (or occasionally .hpp) but some teams use alternative extensions for their implementation files, such as .cxx. This has no effect on how the actual code is interpreted.
+Note that these file names are not required by the C++ language but conventions. Nearly everyone gives header files a .h extension (or occasionally .hpp) but some teams use alternative extensions for their implementation files, such as .cxx. This has no effect on how the actual code is interpreted.
 
 Aside: There are historical and technical reasons for these different file extensions. The Core C++ Guidelines recommend using .cpp and .h for new projects.
 
 Public or private?
 Class member variables and methods should be specified as being either private or public. Private variables or methods can only be accessed from within the class, whereas public variables and methods can be accessed from outside the class. There are a couple of design principles to consider when decide whether to make a method or variable public or private.
 
-For methods: Only make a method public if it needs to be used outside the class; helper methods that are only called from methods in the class are best declared private.
+Only make a method public if it needs to be used outside the class. Helper methods that are only called from methods in the class are best declared private.
 
-For variables: Make all member variables private. If you need to access them from outside the class, write public getter and setter methods for the variables. This allows you to write the setter methods to ensure that any class invariants are maintained (for example such as ensuring that an array size is a positive number). There are exceptions to this principle but you won’t encounter any in this lab.
-
-An important exception to this is member variables of a struct. By default, these are all public and they should be left that way. If you need to make members of a struct private, you probably should define a class instead.
+Make all member variables private. If you need to access them from outside the class, write public getter and setter methods for the variables. This allows you to write the setter methods to ensure that any class invariants are maintained. An example of maintaining class invariants includes ensuring an array size is a positive number. There are exceptions to this principle, such as member variables of a struct. By default, the member variables of a struct are all public, and they should be left that way. If you need to make members of a struct private, you probably should define a class instead.
 
 Constructors and destructors
-Every class requires at least one constructor that creates new objects of that class. A class will often have multiple constructors that build new objects in slightly different ways. A constructor is a method that has exactly the same name as the class and has no return type; it is responsible for setting the initial values of the member variables of an object. For simple classes, the compiler will define a constructor for you. You may still want to add other constructors or override the default.
+Every class requires at least one constructor that creates new objects of that class. A class will often have multiple constructors that build new objects in slightly different ways. A constructor is a method that has exactly the same name as the class and has no return type. It is responsible for setting the initial values of the member variables of an object. For simple classes, the compiler will define a constructor for you. You may still want to add other constructors or override the default.
 
-C++ classes also require destructors. A destructor is responsible for releasing any resources, such as dynamic memory, that were acquired by the object’s constructor. If you don’t write a destructor for a class a default one is created for you. In many cases, the default will be sufficient. However, classes that acquire dynamic memory via new require an explicit destructor to call delete. For such classes, the default destructor is incorrect and introduces memory leaks. You must define your own destructor. The class that you create in this lab is such a class.
+C++ classes also require destructors. A destructor is responsible for releasing any resources, such as dynamic memory, that were acquired by the object’s constructor. If you don’t write a destructor for a class, a default one is created automatically by the compiler. In many cases, the default destructor will be sufficient. However, classes that acquire dynamic memory via new require an explicit destructor to call delete. For such classes, the default destructor is incorrect and introduces memory leaks. You must define your own destructor. The class that you create in this lab is such a class.
 
 In the next lab, you will define a class that uses unique_ptr<> instead of “raw” C++ pointers. One of the big advantages of unique_ptr<> is that it calls delete automatically, so that you typically rely on the default destructor for your class rather than writing your own.
 
 Class description
-The class creates an array in dynamic memory of a given size. Users are allowed to insert values in the next available space in the array and to change existing values, but are not allowed to insert values in such a way that there are “gaps” of unused elements in the array. Users are allowed to retrieve values from the occupied section of the array. Users are not allowed to delete values (although, as described above, they may change them).
+The class creates an array in dynamic memory of a given size. Users are allowed to insert values in the next available space in the array and to change existing values, but the users are not allowed to insert values in such a way that there are “gaps” of unused elements in the array. Users are allowed to retrieve values from the occupied section of the array. Users are not allowed to delete values (although, as described above, they may change them).
 
 The class will have the following public methods:
 
